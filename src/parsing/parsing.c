@@ -6,79 +6,57 @@
 typedef struct	s_type_list {
     int			open_quote;
     int			close_quote;
-    int			is_cmd; // pipe 포함
+    int			is_cmd;
     int			is_flag;
     int			is_env_parameter;
 }				t_type_list;
 
-typedef struct		s_token {
-    char			*str;
-    t_type_list		type_list;
-    struct  s_token	*next;
-}					t_token;
+typedef struct s_redir {
+	int  in_type; // enum으로 here_doc = 0, redir_in = 1, redir_out = 2, redir_app = 3으로 지정
+	int  out_type;
+	char *filename; // redirection에 들어갈 filename
+}              t_redir;
 
-typedef	struct		s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}					t_env;
+typedef struct s_cmd {
+	char    **cmd; // [0]은 적절한 path가 연결된 cmd, [1]부터 cmd에 들어갈 인자
+	t_redir redir_type;
+}              t_cmd;
 
-
-typedef struct		s_state {
-	t_token			*token_head;
-	t_env			*env_head;
-}					t_state;
-
-t_state				g_state;
-
-t_token	*array_split_to_token(char **array, t_token *token_head)
-{
-	t_token *temp_head;
-	int 	idx;
-	int		len;
-
-	idx = 0;
-	
-	temp_head = token_head;
-	while (*array[idx])
-	{
-		token_head = (t_token *)malloc(sizeof(t_token));
-		len = ft_strlen(array[idx]);
-		token_head->str = ft_substr(array[idx], 0, len);
-		idx++;
-		token_head = token_head->next;
-	}
-	token_head->next = NULL;
-
-	return (temp_head);
-}
-
-void	init_state(t_state *state)
-{
-	ft_memset((void *)state, 0, sizeof(t_state));
-}
+typedef struct s_arg {
+	t_cmd *c_t; // 명령어 구조체 (파이프를 구분자로 끊어서 한 명령어 구조체에 넣는다)
+	int  cmd_count; // 명령어 구조체 수
+	int  **fds; // pipe의 fd[2]의 배열
+}              t_arg;
 
 
 int main(int argc, char *argv[], char **envp)
 {
     char	*input;
 	char	**split_strs;
+	t_arg	args;
     int		i = 0;
-	t_token *temp;
+	int		j = 0;
 
-	init_state(&g_state);
-    input = readline("jsh> ");
-	split_strs = ft_split(input, ' ');
-	// while (split_strs[i])
-    // {	
-	// 	printf("%s\n", split_strs[i]);
-	// 	i++;
-	// }
+    input = readline("jsh> "); // 빈 문자열을 받았을 때 다시 실행되도록 해야 함
 	
-	temp = array_split_to_token(split_strs, g_state.token_head);
-	// 입력받은 내용을 빈칸 기준으로 나눠서 토큰에 집어넣는 거 잘 안 되네요...
-    
+	split_strs = ft_split(input, '|'); // 파이프 앞뒤로 붙은 공백 제거해주어야 함
+	while (split_strs[i])
+    {	
+		printf("%s\n", split_strs[i]);
+		i++;
+	}
+	printf("size of args: %d\n", i);
+
+	while (j > i) {
+		args.c_t = ft_calloc(1, sizeof(t_cmd));
+		args.c_t[j].cmd = ft_split(split_strs[j], ' ');
+		j++;
+	}
+	// 배열 커맨드 나눠서 넣는 와일문 작업중!!!
+
+	printf("the first command str: %s\n", args.c_t[0].cmd[0]);
+	printf("the second command str: %s\n", args.c_t[0].cmd[1]);
+	printf("the third command str: %s\n", args.c_t[0].cmd[2]);
 
     return 0;
 }
