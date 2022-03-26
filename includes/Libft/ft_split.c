@@ -3,33 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sanjeon <sanjeon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: junghyki <junghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/01 22:34:24 by sanjeon           #+#    #+#             */
-/*   Updated: 2021/10/25 14:25:04 by sanjeon          ###   ########.fr       */
+/*   Updated: 2022/03/26 15:46:59 by junghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	array_size(char const *s, char c)
-{
-	size_t	count;
-	size_t	i;
+// static size_t	array_size(char const *s, char c)
+// {
+// 	size_t	count;
+// 	size_t	i;
 
-	count = 0;
-	i = 0;
-	while (s[i] != 0)
-	{
-		while (s[i] == c)
-			i++;
-		if (s[i])
-			count++;
-		while (s[i] != c && s[i])
-			i++;
-	}
-	return (count);
-}
+// 	count = 0;
+// 	i = 0;
+// 	while (s[i] != 0)
+// 	{
+// 		while (s[i] == c)
+// 			i++;
+// 		if (s[i])
+// 			count++;
+// 		while (s[i] != c && s[i])
+// 			i++;
+// 	}
+// 	return (count);
+// }
 
 static char	**free_split(char **output, size_t i)
 {
@@ -76,7 +76,7 @@ char	**ft_split(char const *s, char c)
 
 	if (s == 0)
 		return (0);
-	output = (char **)ft_calloc(array_size(s, c) + 1, sizeof(char *));
+	output = (char **)ft_calloc(ft_count_arrsize(s, c) + 1, sizeof(char *));
 	if (output == 0)
 		return (0);
 	output = array_split(s, c, output);
