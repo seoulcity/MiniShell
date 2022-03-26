@@ -45,7 +45,13 @@ int main(int argc, char *argv[], char **envp)
 
 		// 따옴표 처리
 
+		// 이하 51 - 63번째 줄은 파이프 기준으로 명령어 구조체 포인터(args.c_t)에 나눠서 배치하되,
+		// 이를 다시 띄워쓰기 단위로 커맨드 나누어 배열(char** args.c_t[i].cmd)로 입력하는 부분
+
 		split_strs = ft_split(input, '|'); // 파이프 앞뒤로 붙은 공백 제거해주어야 함
+		
+		while (split_strs[i])
+			i++;
 		args.cmd_count = i;
 		args.c_t = ft_calloc(i, sizeof(t_cmd));
 		args.c_t[i].cmd = NULL;
@@ -56,7 +62,8 @@ int main(int argc, char *argv[], char **envp)
 			j++;
 		}
 		
-		j = 0;
+		// 배열 스플릿이 잘 되었는지 확인하는 테스터
+		/* j = 0;
 		while (j < i)
 		{
 			while (args.c_t[j].cmd[k])
@@ -66,7 +73,8 @@ int main(int argc, char *argv[], char **envp)
 			}
 			j++;
 			k = 0;
-		}
+		} */ 
+
 		/* 시그널 처리
 		ctrl + c 새로운 줄 출력
 		ctrl + d 종료
