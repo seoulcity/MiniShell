@@ -28,35 +28,50 @@ typedef struct s_arg {
 	int  **fds; // pipe의 fd[2]의 배열
 }              t_arg;
 
-
 int main(int argc, char *argv[], char **envp)
 {
     char	*input;
 	char	**split_strs;
+	char	**split_blanks;
+
 	t_arg	args;
     int		i = 0;
 	int		j = 0;
+	int		k = 0;
 
-    input = readline("jsh> "); // 빈 문자열을 받았을 때 다시 실행되도록 해야 함
-	
-	split_strs = ft_split(input, '|'); // 파이프 앞뒤로 붙은 공백 제거해주어야 함
-	while (split_strs[i])
-    {	
-		printf("%s\n", split_strs[i]);
-		i++;
-	}
-	printf("size of args: %d\n", i);
+	// while (1)
+	// {
+		input = readline("jsh> "); // 빈 문자열을 받았을 때 다시 실행되도록 해야 함
 
-	while (j > i) {
-		args.c_t = ft_calloc(1, sizeof(t_cmd));
-		args.c_t[j].cmd = ft_split(split_strs[j], ' ');
-		j++;
-	}
-	// 배열 커맨드 나눠서 넣는 와일문 작업중!!!
+		// 따옴표 처리
 
-	printf("the first command str: %s\n", args.c_t[0].cmd[0]);
-	printf("the second command str: %s\n", args.c_t[0].cmd[1]);
-	printf("the third command str: %s\n", args.c_t[0].cmd[2]);
+		split_strs = ft_split(input, '|'); // 파이프 앞뒤로 붙은 공백 제거해주어야 함
+		args.cmd_count = i;
+		args.c_t = ft_calloc(i, sizeof(t_cmd));
+		args.c_t[i].cmd = NULL;
 
+		while (j < i)
+		{
+			args.c_t[j].cmd = ft_split(split_strs[j], ' ');
+			j++;
+		}
+		
+		j = 0;
+		while (j < i)
+		{
+			while (args.c_t[j].cmd[k])
+			{	
+				printf("[%d][%d]: %s\n", j, k, args.c_t[j].cmd[k]);
+				k++;
+			}
+			j++;
+			k = 0;
+		}
+		/* 시그널 처리
+		ctrl + c 새로운 줄 출력
+		ctrl + d 종료
+		ctrl + \ 무반응  
+		*/
+	// }
     return 0;
 }
