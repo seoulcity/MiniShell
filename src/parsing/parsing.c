@@ -28,6 +28,41 @@ typedef struct s_arg {
 	int  **fds; // pipe의 fd[2]의 배열
 }              t_arg;
 
+int	ft_strnchr(const char *d, int c)
+{
+	int	d_len;
+	int i;
+
+	i = 0;
+	d_len = ft_strlen(d);
+	if (d == 0)
+		return (0);
+	while (i < d_len)
+	{
+		if ((char)d[i] == (char)c)
+			return (i);
+		i++;
+	}
+	return (0);
+}
+
+char **quote_split(const char *input) {
+	
+	int n;
+	static int index;
+
+	if (ft_strchr(input, '\''))
+		n = ft_strnchr(input, '\'');
+	
+	
+
+	// else if (ft_strrchr(input, '\"'))
+	// {
+	// 	printf("there is \"\n");
+	// }
+	return ft_split(input, '\'');
+}
+
 int main(int argc, char *argv[], char **envp)
 {
     char	*input;
@@ -39,9 +74,10 @@ int main(int argc, char *argv[], char **envp)
 	int		j = 0;
 	int		k = 0;
 
-	// while (1)
-	// {
+	while (1)
+	{
 		input = readline("jsh> "); // 빈 문자열을 받았을 때 다시 실행되도록 해야 함
+		quote_split(input);
 
 		// 따옴표 처리
 
@@ -80,6 +116,6 @@ int main(int argc, char *argv[], char **envp)
 		ctrl + d 종료
 		ctrl + \ 무반응  
 		*/
-	// }
+	}
     return 0;
 }
